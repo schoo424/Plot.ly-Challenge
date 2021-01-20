@@ -45,13 +45,37 @@
                 title: 'Marker Size',
                 showlegend: false,
                 height: 600,
-                width: 1200 //height and width may not be needed, confirm this later
+                width: 1200 //increase this later to make it easier to read
               };
               
               Plotly.newPlot("bubble", bubbleData, layout);
         });
         
     }
+
+// populate the demographic info panel
+
+    function metadataBuild (sampleID) {       
+        d3.json("samples.json").then(function(data){ 
+        var panelData = data.metadata.filter(sample => sample.id == sampleID)[0]  //grab the first value
+        console.log(panelData);
+
+        // Use d3 to select the panel with id of `#sample-metadata`
+        updatePanel = d3.select("#sample-metadata");
+
+        // // Use `.html("") to clear any existing metadata
+        updatePanel.html("");        
+
+        // Use `Object.entries` to add each key and value pair to the panel
+        // Hint: use d3 to append new tags for each key-value in the metadata
+
+        Object.entries(panelData).forEach(([key, value]) => {
+            updatePanel.append("h6").text(`${key}:${value}`);                    
+        });
+    });
+    
+    };
+
 
 //build the drop-down menu
     function init() {
@@ -73,17 +97,9 @@
     function optionChanged(ID) {
         console.log(ID);
         displayCharts(ID);
+        metadataBuild(ID);
 
     }
 
     init();
 
-
-//write a function to iterate over the dataset --> use unpack?
-    // function unpack(rows, index) {
-    //     var myArray = rows.map(function(row) {
-    //         return row[index];
-    //     });
-    // };
-    
-    //plot charts

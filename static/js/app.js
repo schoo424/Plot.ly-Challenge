@@ -45,7 +45,7 @@
                 title: 'Marker Size',
                 showlegend: false,
                 height: 600,
-                width: 600 //height and width may not be needed, confirm this later
+                width: 1200 //height and width may not be needed, confirm this later
               };
               
               Plotly.newPlot("bubble", bubbleData, layout);

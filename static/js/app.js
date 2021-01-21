@@ -49,10 +49,62 @@
               };
               
               Plotly.newPlot("bubble", bubbleData, layout);
+
         });
         
     }
 
+//BONUS: gauge chart creation:
+
+    function createGauge (sampleID) {
+        d3.json("samples.json").then(function(data){ 
+        var gaugeData = data.metadata.filter(sample => sample.id == sampleID)[0]  //grab the first value
+        // console.log(gaugeData.wfreq);
+      
+        // var gauge = [
+        // {
+        //     domain: { x: [0, 1], y: [0, 1] },
+        //     value: gaugeData.wfreq,
+        //     title: { text: "Speed" },
+        //     type: "indicator",
+        //     mode: "gauge+number"
+        // }
+        // ];
+
+        // var layout = { width: 600, height: 500, margin: { t: 0, b: 0 } };
+      
+        // Plotly.newPlot('gauge', gauge, layout);  
+        
+        var data = [
+            {
+              domain: { x: [0, 1], y: [0, 1] },
+              value: gaugeData.wfreq,
+              title: { text: "Belly Button Washing Frequency" },
+              type: "indicator",
+              mode: "gauge+number",
+              delta: { reference: 380 },
+              gauge: {
+                axis: { range: [null, 10] },
+                steps: [
+                  { range: [0, 250], color: "lightgray" },
+                  { range: [250, 400], color: "gray" }
+                ],
+                threshold: {
+                  line: { color: "red", width: 4 },
+                  thickness: 0.75,
+                  value: 490
+                }
+              }
+            }
+          ];
+          
+          var layout = { width: 600, height: 450, margin: { t: 0, b: 0 } };
+          Plotly.newPlot('gauge', data, layout);
+        
+    });
+    };
+
+                
 // populate the demographic info panel
 
     function metadataBuild (sampleID) {       
@@ -98,7 +150,7 @@
         console.log(ID);
         displayCharts(ID);
         metadataBuild(ID);
-
+        createGauge(ID);
     }
 
     init();
